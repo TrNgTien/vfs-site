@@ -3,7 +3,7 @@ title: Supported Languages
 description: Languages and file extensions supported by vfs.
 ---
 
-vfs supports **13 languages** using a combination of Go's native AST parser, tree-sitter grammars, and line-based heuristics.
+vfs supports **15 languages** using a combination of Go's native AST parser, tree-sitter grammars, and line-based heuristics.
 
 ## Language table
 
@@ -17,6 +17,8 @@ vfs supports **13 languages** using a combination of Go's native AST parser, tre
 | Java | `.java` | tree-sitter |
 | C# | `.cs` | tree-sitter |
 | Dart | `.dart` | tree-sitter |
+| Kotlin | `.kt`, `.kts` | tree-sitter |
+| Swift | `.swift` | tree-sitter |
 | HCL / Terraform | `.tf`, `.hcl` | tree-sitter |
 | Dockerfile | `Dockerfile`, `Dockerfile.*` | line-based |
 | Protobuf | `.proto` | line-based |
@@ -31,7 +33,7 @@ Go files are parsed using Go's built-in `go/ast` package. This provides the most
 
 ### Tree-sitter
 
-JavaScript, TypeScript, Python, Rust, Java, C#, Dart, and HCL are parsed using [tree-sitter](https://tree-sitter.github.io/tree-sitter/) grammars. Tree-sitter produces concrete syntax trees that vfs traverses to extract exported declarations.
+JavaScript, TypeScript, Python, Rust, Java, C#, Dart, Kotlin, Swift, and HCL are parsed using [tree-sitter](https://tree-sitter.github.io/tree-sitter/) grammars. Tree-sitter produces concrete syntax trees that vfs traverses to extract exported declarations.
 
 ### Line-based
 
