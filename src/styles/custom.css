@@ -1,0 +1,49 @@
+/* Hero splash page */
+[data-page-title="vfs"] .hero {
+	padding-block: 3rem;
+}
+
+.hero img {
+	border-radius: 50%;
+	filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.15));
+	aspect-ratio: 1;
+	object-fit: cover;
+}
+
+/* Site header logo — avatar style */
+.site-title img {
+	border-radius: 50%;
+}
+
+/* Feature cards on the landing page */
+.sl-steps {
+	--sl-content-width: 70ch;
+}
+
+/* Wider content area for splash pages */
+[data-page-title="vfs"] .sl-container {
+	max-width: 80rem;
+}
+
+/* Card grid polish */
+.card-grid {
+	margin-block: 2rem;
+}
+
+.card {
+	transition: transform 0.15s ease;
+}
+
+.card:hover {
+	transform: translateY(-2px);
+}
+
+/* Benchmark table on the landing page */
+.sl-markdown-content table {
+	font-size: var(--sl-text-sm);
+}
+
+/* Hero actions: give buttons breathing room */
+.hero .action {
+	margin-inline-end: 0.5rem;
+}

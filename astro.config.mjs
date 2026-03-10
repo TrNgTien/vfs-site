@@ -9,6 +9,9 @@ export default defineConfig({
 			title: 'vfs',
 			description:
 				'Virtual Function Signatures — extract exported signatures from source code with bodies stripped. Save 60-70% tokens for AI coding agents.',
+			logo: {
+				src: './src/assets/vfs.png',
+			},
 			social: [
 				{
 					icon: 'github',
@@ -16,6 +19,7 @@ export default defineConfig({
 					href: 'https://github.com/TrNgTien/vfs',
 				},
 			],
+			customCss: ['./src/styles/custom.css'],
 			sidebar: [
 				{
 					label: 'Start Here',
