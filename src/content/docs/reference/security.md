@@ -1,6 +1,6 @@
 ---
-title: "Security & Privacy"
-description: "vfs is local-first by design. Your source code never leaves your machine."
+title: "Security & Privacy — 100% Local, Zero Telemetry"
+description: "vfs is local-first by design. Zero network access, no telemetry, no data collection, no code storage. Your source code never leaves your machine. Fully offline after install."
 ---
 
 :::note[Local-first by design]

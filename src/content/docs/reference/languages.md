@@ -1,6 +1,6 @@
 ---
-title: "Supported Languages"
-description: "Languages and file extensions supported by vfs."
+title: "Supported Languages — 16 Languages via AST & Tree-sitter"
+description: "vfs supports 16 languages: Go, TypeScript, JavaScript, Python, Rust, Java, C#, Dart, Kotlin, Swift, Ruby, HCL, Dockerfile, Protobuf, SQL, and YAML. Parsed via go/ast, tree-sitter, and line-based heuristics."
 ---
 
 vfs supports **16 languages** using a combination of Go's native AST parser, tree-sitter grammars, and line-based heuristics.

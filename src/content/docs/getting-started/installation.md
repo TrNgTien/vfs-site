@@ -1,6 +1,6 @@
 ---
-title: "Installation"
-description: "Install vfs on Linux, macOS, or Windows via pre-built binary, source build, or Docker."
+title: "Install vfs — Pre-built Binary, Source, or Docker"
+description: "Install vfs on Linux, macOS, or Windows via pre-built binary, source build, or Docker. Step-by-step guide with troubleshooting for Go, CGO, and PATH setup."
 ---
 
 | Your situation | Method | What you need |

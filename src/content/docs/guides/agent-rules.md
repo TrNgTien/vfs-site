@@ -1,6 +1,6 @@
 ---
-title: "Agent Rules"
-description: "Tell your AI agent to use vfs before grep — required for token savings."
+title: "Agent Rules — Tell Your AI Agent to Use vfs Before grep"
+description: "Create rule files for Cursor, Claude Code, Antigravity, Windsurf, Cline, Continue, and Aider that instruct AI agents to use vfs instead of grep for code search."
 ---
 
 :::caution[This step is required]

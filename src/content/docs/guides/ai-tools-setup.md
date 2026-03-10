@@ -1,6 +1,6 @@
 ---
-title: "AI Tools Setup"
-description: "Connect vfs to your AI coding tool via MCP or CLI."
+title: "AI Tools Setup — Connect vfs to Cursor, Claude Code, Windsurf & More"
+description: "Configure vfs with Cursor, Claude Code, Claude Desktop, Antigravity, Windsurf, Cline, Continue, Zed, and Aider via MCP or CLI integration."
 ---
 
 Setting up vfs requires **two steps**:

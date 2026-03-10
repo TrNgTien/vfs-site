@@ -1,0 +1,31 @@
+---
+import Default from '@astrojs/starlight/components/Head.astro';
+
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'SoftwareApplication',
+	name: 'vfs',
+	alternateName: 'Virtual Function Signatures',
+	description:
+		'AST-based CLI tool that extracts exported function signatures from source code with bodies stripped. Save 60-70% tokens for AI coding agents.',
+	url: 'https://vfs-docs.netlify.app',
+	applicationCategory: 'DeveloperApplication',
+	operatingSystem: 'Linux, macOS, Windows',
+	offers: {
+		'@type': 'Offer',
+		price: '0',
+		priceCurrency: 'USD',
+	},
+	author: {
+		'@type': 'Person',
+		name: 'TrNgTien',
+		url: 'https://github.com/TrNgTien',
+	},
+	codeRepository: 'https://github.com/TrNgTien/vfs',
+	programmingLanguage: ['Go', 'TypeScript', 'Python', 'Rust', 'Java', 'C#', 'Dart', 'Kotlin', 'Swift', 'Ruby'],
+	license: 'https://github.com/TrNgTien/vfs/blob/main/LICENSE',
+};
+---
+
+<Default><slot /></Default>
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

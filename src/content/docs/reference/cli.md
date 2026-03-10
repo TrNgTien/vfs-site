@@ -1,6 +1,6 @@
 ---
-title: "CLI Commands"
-description: "Complete reference for all vfs commands and flags."
+title: "CLI Reference — All vfs Commands, Flags & Usage Patterns"
+description: "Complete reference for vfs CLI: search signatures, run benchmarks, view stats, start MCP server, manage background processes, and launch the dashboard."
 ---
 
 ---

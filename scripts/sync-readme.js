@@ -119,9 +119,18 @@ function writeIndex(s) {
   write(
     'index.mdx',
     `---
-title: vfs
-description: Virtual Function Signatures — extract exported signatures from source code with bodies stripped. Save 60-70% tokens for AI coding agents.
+title: "vfs — Virtual Function Signatures for AI Coding Agents"
+description: "AST-based CLI tool that extracts exported function signatures from source code with bodies stripped. Save 60-70% tokens for AI coding agents like Cursor, Claude Code, and Windsurf. Supports ${langLabel}."
 template: splash
+head:
+  - tag: meta
+    attrs:
+      property: "og:title"
+      content: "vfs — Virtual Function Signatures for AI Coding Agents"
+  - tag: meta
+    attrs:
+      property: "og:description"
+      content: "AST-based CLI tool that extracts exported function signatures from source code. Save 60-70% tokens for AI agents. Supports Go, TypeScript, Python, Rust, and more."
 hero:
   title: vfs
   tagline: Extract exported signatures from source code with bodies stripped. Save 60-70% tokens for AI coding agents.
@@ -195,9 +204,9 @@ function writeInstallation(s) {
   write(
     'getting-started/installation.md',
     `${frontmatter({
-      title: 'Installation',
+      title: 'Install vfs — Pre-built Binary, Source, or Docker',
       description:
-        'Install vfs on Linux, macOS, or Windows via pre-built binary, source build, or Docker.',
+        'Install vfs on Linux, macOS, or Windows via pre-built binary, source build, or Docker. Step-by-step guide with troubleshooting for Go, CGO, and PATH setup.',
     })}
 
 | Your situation | Method | What you need |
@@ -249,8 +258,8 @@ function writeQuickStart(s) {
   write(
     'getting-started/quick-start.md',
     `${frontmatter({
-      title: 'Quick Start',
-      description: 'Your first vfs commands in 60 seconds.',
+      title: 'Quick Start — Your First vfs Commands in 60 Seconds',
+      description: 'Get started with vfs in 60 seconds. Learn to search function signatures, scan directories, view token savings stats, and start the MCP server.',
     })}
 
 Once [installed](/getting-started/installation/), you can start scanning code immediately.
@@ -326,8 +335,8 @@ function writeCLI(s) {
   write(
     'reference/cli.md',
     `${frontmatter({
-      title: 'CLI Commands',
-      description: 'Complete reference for all vfs commands and flags.',
+      title: 'CLI Reference — All vfs Commands, Flags & Usage Patterns',
+      description: 'Complete reference for vfs CLI: search signatures, run benchmarks, view stats, start MCP server, manage background processes, and launch the dashboard.',
     })}
 
 ${body}
@@ -355,8 +364,8 @@ function writeLanguages(s) {
   write(
     'reference/languages.md',
     `${frontmatter({
-      title: 'Supported Languages',
-      description: 'Languages and file extensions supported by vfs.',
+      title: 'Supported Languages — ' + langCount + ' Languages via AST & Tree-sitter',
+      description: 'vfs supports ' + langCount + ' languages: Go, TypeScript, JavaScript, Python, Rust, Java, C#, Dart, Kotlin, Swift, Ruby, HCL, Dockerfile, Protobuf, SQL, and YAML. Parsed via go/ast, tree-sitter, and line-based heuristics.',
     })}
 
 vfs supports **${langCount} languages** using a combination of Go's native AST parser, tree-sitter grammars, and line-based heuristics.
@@ -408,8 +417,8 @@ function writeBenchmark(s) {
   write(
     'reference/benchmark.md',
     `${frontmatter({
-      title: 'Benchmark',
-      description: 'Token savings data — vfs vs grep vs reading entire files.',
+      title: 'Benchmark — vfs Saves 98.6% Tokens vs Reading Files',
+      description: 'Benchmark data comparing vfs, grep, and reading entire files. vfs saves 98.6% tokens vs file reading and 89.5% vs grep. Run your own benchmarks with vfs bench.',
     })}
 
 ## Self-benchmark results
@@ -448,9 +457,9 @@ function writeSecurity(s) {
   write(
     'reference/security.md',
     `${frontmatter({
-      title: 'Security & Privacy',
+      title: 'Security & Privacy — 100% Local, Zero Telemetry',
       description:
-        'vfs is local-first by design. Your source code never leaves your machine.',
+        'vfs is local-first by design. Zero network access, no telemetry, no data collection, no code storage. Your source code never leaves your machine. Fully offline after install.',
     })}
 
 :::note[Local-first by design]
@@ -504,8 +513,8 @@ function writeAIToolsSetup(s) {
   write(
     'guides/ai-tools-setup.md',
     `${frontmatter({
-      title: 'AI Tools Setup',
-      description: 'Connect vfs to your AI coding tool via MCP or CLI.',
+      title: 'AI Tools Setup — Connect vfs to Cursor, Claude Code, Windsurf & More',
+      description: 'Configure vfs with Cursor, Claude Code, Claude Desktop, Antigravity, Windsurf, Cline, Continue, Zed, and Aider via MCP or CLI integration.',
     })}
 
 Setting up vfs requires **two steps**:
@@ -643,9 +652,9 @@ function writeAgentRules(s) {
   write(
     'guides/agent-rules.md',
     `${frontmatter({
-      title: 'Agent Rules',
+      title: 'Agent Rules — Tell Your AI Agent to Use vfs Before grep',
       description:
-        'Tell your AI agent to use vfs before grep — required for token savings.',
+        'Create rule files for Cursor, Claude Code, Antigravity, Windsurf, Cline, Continue, and Aider that instruct AI agents to use vfs instead of grep for code search.',
     })}
 
 :::caution[This step is required]

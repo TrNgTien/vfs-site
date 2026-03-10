@@ -1,6 +1,6 @@
 ---
-title: "Benchmark"
-description: "Token savings data — vfs vs grep vs reading entire files."
+title: "Benchmark — vfs Saves 98.6% Tokens vs Reading Files"
+description: "Benchmark data comparing vfs, grep, and reading entire files. vfs saves 98.6% tokens vs file reading and 89.5% vs grep. Run your own benchmarks with vfs bench."
 ---
 
 ## Self-benchmark results

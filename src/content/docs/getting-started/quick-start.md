@@ -1,6 +1,6 @@
 ---
-title: "Quick Start"
-description: "Your first vfs commands in 60 seconds."
+title: "Quick Start — Your First vfs Commands in 60 Seconds"
+description: "Get started with vfs in 60 seconds. Learn to search function signatures, scan directories, view token savings stats, and start the MCP server."
 ---
 
 Once [installed](/getting-started/installation/), you can start scanning code immediately.
