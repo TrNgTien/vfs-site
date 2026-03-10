@@ -110,33 +110,73 @@ function countLanguages(langSection) {
 
 function writeIndex(s) {
   const langCount = countLanguages(s['Supported Languages'] || '');
-  const langLabel = langCount > 0 ? `**${langCount} languages**` : 'multiple languages';
+  const langLabel = langCount > 0 ? `${langCount} languages` : 'multiple languages';
+
+  const benchmarkTable = (s['Benchmark'] || '')
+    .replace(/Run it yourself:[\s\S]*$/, '')
+    .trim();
 
   write(
     'index.mdx',
-    `${frontmatter({
-      title: 'What is vfs?',
-      description:
-        'Virtual Function Signatures — extract exported signatures from source code with bodies stripped.',
-    })}
+    `---
+title: vfs
+description: Virtual Function Signatures — extract exported signatures from source code with bodies stripped. Save 60-70% tokens for AI coding agents.
+template: splash
+hero:
+  title: vfs
+  tagline: Extract exported signatures from source code with bodies stripped. Save 60-70% tokens for AI coding agents.
+  image:
+    file: ../../assets/vfs.png
+  actions:
+    - text: Get Started
+      link: /getting-started/installation/
+      icon: right-arrow
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/TrNgTien/vfs
+      icon: external
+      variant: minimal
+---
 
-**vfs** (Virtual Function Signatures) extracts exported function, class, interface, and type signatures from source code with bodies stripped.
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
-${(s['Why vfs?'] || '').trim()}
+## Why vfs?
+
+<CardGrid>
+  <Card title="60-70% Token Savings" icon="rocket">
+    AST-based parsing returns only signatures — no function bodies, imports, or noise. Your AI agent reads less and responds faster.
+  </Card>
+  <Card title="${langLabel}" icon="document">
+    Go, TypeScript, Python, Rust, Java, C#, Dart, Kotlin, Swift, Ruby, and more — via \`go/ast\`, tree-sitter, and line-based parsers.
+  </Card>
+  <Card title="Any AI Tool" icon="laptop">
+    Works with Cursor, Claude Code, Antigravity, Windsurf, Cline, Continue, Aider, Copilot, Zed, and your own scripts. No vendor lock-in.
+  </Card>
+  <Card title="Local & Private" icon="approve-check">
+    Zero network access, no telemetry, no data collection. All parsing happens on your machine. Fully offline after install.
+  </Card>
+</CardGrid>
 
 ## How it works
 
-${(s['How It Works'] || '').replace(/^This works across \d+ languages:/m, `This works across ${langLabel}:`).trim()}
+Given a Go project with thousands of lines, asking "where is the login handler?" traditionally means grepping or reading entire files. vfs gives you just the signatures:
 
-## Token savings at a glance
+\`\`\`bash
+$ vfs . -f login
+internal/handlers/auth.go:23:   func HandleLogin(w http.ResponseWriter, r *http.Request)
+internal/services/auth.go:10:   func ValidateToken(token string) (*Claims, error)
+internal/middleware/jwt.go:45:  func RequireLogin(next http.Handler) http.Handler
+\`\`\`
 
-${(s['Benchmark'] || '').replace(/Run it yourself:[\s\S]*$/, '').trim()}
+Each line tells you the **file**, **line number**, and **full signature** — no function bodies, no imports, no noise. You (or your AI agent) can then read only the exact lines needed.
+
+## Benchmark
+
+${benchmarkTable}
 
 See the full [Benchmark](/reference/benchmark/) page for details and how to run your own.
 
-## Next steps
-
-import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+## Get started
 
 <CardGrid>
   <LinkCard title="Installation" href="/getting-started/installation/" description="Install vfs via pre-built binary, source, or Docker." />

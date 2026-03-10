@@ -1,39 +1,56 @@
 ---
-title: "What is vfs?"
-description: "Virtual Function Signatures — extract exported signatures from source code with bodies stripped."
+title: vfs
+description: Virtual Function Signatures — extract exported signatures from source code with bodies stripped. Save 60-70% tokens for AI coding agents.
+template: splash
+hero:
+  title: vfs
+  tagline: Extract exported signatures from source code with bodies stripped. Save 60-70% tokens for AI coding agents.
+  image:
+    file: ../../assets/vfs.png
+  actions:
+    - text: Get Started
+      link: /getting-started/installation/
+      icon: right-arrow
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/TrNgTien/vfs
+      icon: external
+      variant: minimal
 ---
 
-**vfs** (Virtual Function Signatures) extracts exported function, class, interface, and type signatures from source code with bodies stripped.
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
-AI coding agents waste tokens by grepping or reading entire files just to find a function. vfs parses source via AST and tree-sitter, returning only the signatures -- a compact "table of contents" of any codebase.
+## Why vfs?
 
-**60-70% fewer tokens per search.**
-
-It works with any AI coding tool -- Cursor, Claude Code, Antigravity, Windsurf, Cline, Continue, Aider, Copilot, Zed, or your own scripts. No vendor lock-in.
+<CardGrid>
+  <Card title="60-70% Token Savings" icon="rocket">
+    AST-based parsing returns only signatures — no function bodies, imports, or noise. Your AI agent reads less and responds faster.
+  </Card>
+  <Card title="16 languages" icon="document">
+    Go, TypeScript, Python, Rust, Java, C#, Dart, Kotlin, Swift, Ruby, and more — via `go/ast`, tree-sitter, and line-based parsers.
+  </Card>
+  <Card title="Any AI Tool" icon="laptop">
+    Works with Cursor, Claude Code, Antigravity, Windsurf, Cline, Continue, Aider, Copilot, Zed, and your own scripts. No vendor lock-in.
+  </Card>
+  <Card title="Local & Private" icon="approve-check">
+    Zero network access, no telemetry, no data collection. All parsing happens on your machine. Fully offline after install.
+  </Card>
+</CardGrid>
 
 ## How it works
 
 Given a Go project with thousands of lines, asking "where is the login handler?" traditionally means grepping or reading entire files. vfs gives you just the signatures:
 
-```
+```bash
 $ vfs . -f login
 internal/handlers/auth.go:23:   func HandleLogin(w http.ResponseWriter, r *http.Request)
 internal/services/auth.go:10:   func ValidateToken(token string) (*Claims, error)
 internal/middleware/jwt.go:45:  func RequireLogin(next http.Handler) http.Handler
 ```
 
-Each line tells you the **file**, **line number**, and **full signature** -- no function bodies, no imports, no noise. You (or your AI agent) can then read only the exact lines needed.
+Each line tells you the **file**, **line number**, and **full signature** — no function bodies, no imports, no noise. You (or your AI agent) can then read only the exact lines needed.
 
-This works across **16 languages**:
-
-```
-$ vfs ./frontend -f auth
-src/hooks/useAuth.ts:5:         export function useAuth(): AuthContext
-src/components/LoginForm.tsx:12: export const LoginForm: React.FC<LoginFormProps>
-src/api/client.py:28:           def authenticate(username: str, password: str) -> Token
-```
-
-## Token savings at a glance
+## Benchmark
 
 Self-benchmark on this repository (pattern `"Extract"`, 4,178 lines of source):
 
@@ -48,9 +65,7 @@ Self-benchmark on this repository (pattern `"Extract"`, 4,178 lines of source):
 
 See the full [Benchmark](/reference/benchmark/) page for details and how to run your own.
 
-## Next steps
-
-import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+## Get started
 
 <CardGrid>
   <LinkCard title="Installation" href="/getting-started/installation/" description="Install vfs via pre-built binary, source, or Docker." />
