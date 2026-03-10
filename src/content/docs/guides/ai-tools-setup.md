@@ -98,7 +98,8 @@ Most tools use the same stdio JSON config. The only difference is where the file
 **HTTP config** (for Docker, remote setups, or any tool that supports HTTP-based MCP):
 
 ```bash
-vfs up    # starts MCP on :8080 and dashboard on :3000
+vfs up                  # starts MCP on :8080 and dashboard on :3000
+vfs up --port 9090      # starts MCP on :9090 and dashboard on :3000
 ```
 
 ```json
@@ -110,6 +111,8 @@ vfs up    # starts MCP on :8080 and dashboard on :3000
   }
 }
 ```
+
+If using a custom port, update the URL accordingly (e.g. `http://localhost:9090/mcp`).
 
 #### Method 2: CLI Integration
 

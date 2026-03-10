@@ -168,6 +168,9 @@ vfs --help
 ```bash
 docker build -t vfs-mcp .
 docker run --rm -v $(pwd):/workspace -p 8080:8080 -p 3000:3000 vfs-mcp
+
+# Custom ports via environment variables
+docker run --rm -v $(pwd):/workspace -e VFS_PORT=9090 -e VFS_DASHBOARD_PORT=4000 -p 9090:9090 -p 4000:4000 vfs-mcp
 ```
 
 On Windows PowerShell, replace `$(pwd)` with `${PWD}`:

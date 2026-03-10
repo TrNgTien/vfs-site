@@ -81,7 +81,9 @@ Run the MCP server (HTTP) and dashboard together in the foreground.
 
 ```bash
 vfs serve                                    # defaults: MCP on :8080, dashboard on :3000
-vfs serve --mcp :9090 --dashboard-port 4000  # custom ports
+vfs serve --port 9090                        # MCP on :9090
+vfs serve --port 9090 --dashboard-port 4000  # both custom
+vfs serve --mcp :9090 --dashboard-port 4000  # equivalent (full address form)
 ```
 
 ---
@@ -91,9 +93,11 @@ vfs serve --mcp :9090 --dashboard-port 4000  # custom ports
 Manage the server as a background process.
 
 ```bash
-vfs up          # start MCP + dashboard in background
-vfs status      # check if running, show endpoints
-vfs down        # stop the background server
+vfs up                  # start MCP + dashboard in background (default port 8080)
+vfs up --port 9090      # start on custom MCP port
+vfs status              # check if running, show endpoints
+vfs status --port 9090  # check custom port
+vfs down                # stop the background server
 ```
 
 ---
