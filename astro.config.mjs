@@ -12,6 +12,10 @@ export default defineConfig({
 			logo: {
 				src: './src/assets/vfs.png',
 			},
+			components: {
+				Hero: './src/components/Hero.astro',
+				Sidebar: './src/components/Sidebar.astro',
+			},
 			social: [
 				{
 					icon: 'github',

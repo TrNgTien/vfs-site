@@ -47,3 +47,71 @@
 .hero .action {
 	margin-inline-end: 0.5rem;
 }
+
+/* ── GitHub badges (shared by hero + sidebar) ── */
+
+.gh-badges {
+	display: flex;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+.gh-badges--loaded {
+	opacity: 1;
+}
+
+.gh-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	padding: 0.3rem 0.65rem;
+	border-radius: 999px;
+	font-size: var(--sl-text-xs);
+	font-weight: 600;
+	line-height: 1;
+	text-decoration: none;
+	color: var(--sl-color-white);
+	background: var(--sl-color-gray-5);
+	border: 1px solid var(--sl-color-gray-4);
+	transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.gh-badge:hover {
+	background: var(--sl-color-gray-4);
+	border-color: var(--sl-color-gray-3);
+}
+
+.gh-badge svg {
+	flex-shrink: 0;
+}
+
+.gh-badge--stars svg {
+	color: #f0b429;
+}
+
+.gh-badge__label {
+	opacity: 0.7;
+}
+
+/* Hero placement */
+.hero-badges-wrapper {
+	padding-block-start: 0.5rem;
+}
+
+@media (min-width: 50rem) {
+	.hero-badges-wrapper {
+		grid-column: 1;
+	}
+}
+
+/* Sidebar compact variant */
+.gh-sidebar-badges {
+	padding: 0.5rem 1rem 0.75rem;
+}
+
+.gh-badges--compact .gh-badge {
+	font-size: 0.7rem;
+	padding: 0.2rem 0.5rem;
+}

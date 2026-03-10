@@ -1,0 +1,232 @@
+---
+description: "HARD CONSTRAINT: You MUST call vfs MCP search BEFORE Grep/Read for ALL code discovery. No exceptions. Violating this rule is never acceptable."
+alwaysApply: true
+---
+
+# HARD CONSTRAINT: Use `vfs` for Code Discovery
+
+> **THIS IS A HARD CONSTRAINT, NOT A GUIDELINE.**
+>
+> Every code search MUST use vfs BEFORE Grep, Read, or SemanticSearch -- unless a skip condition below applies.
+>
+> "I already know what tool to use" and "Grep is faster for this" are NOT valid reasons to skip. If no skip condition matches, call vfs first.
+
+## Why vfs Instead of Grep/Read?
+
+vfs parses source files via AST and returns only exported signatures with bodies stripped. It supports Go, JS, TS, Python, Rust, Java, HCL, Dockerfile, Protobuf, SQL, and YAML. This saves **60-70% of tokens** compared to grep-based search.
+
+## Access Priority: MCP First, CLI Fallback
+
+Agents in Cursor (and similar editors) run inside a **sandbox** that blocks access to host binaries. The `vfs` CLI binary -- even if installed on the host -- will fail with "command not found" or a permission error inside the sandbox. **MCP runs on the host outside the sandbox**, so it bypasses this restriction entirely.
+
+**You MUST follow this order:**
+
+```
+STEP 1: Try MCP → CallMcpTool(server: "user-user-vfs", toolName: "search", ...)
+  │
+  ├─ Works? → Use MCP for all vfs operations. Done.
+  │
+  └─ MCP not available or errors?
+      │
+      ▼
+STEP 2: Try CLI fallback → run `command -v vfs` in Shell
+  │
+  ├─ Found? → Use `vfs <path> -f <pattern>` via Shell for this session.
+  │
+  └─ Not found?
+      │
+      ▼
+STEP 3: vfs is unavailable. You have TWO options -- pick whichever
+  keeps momentum without blocking the user:
+
+  OPTION A (notify): Tell the user once per session:
+    "vfs MCP/CLI is not running. Want me to wait, or proceed with Grep?"
+    Then follow their choice.
+
+  OPTION B (skip & proceed): Silently fall back to Grep/Read and
+    continue working. This is acceptable when:
+    - The task is time-sensitive or the user is waiting for output.
+    - You've already notified the user in this session.
+    - The search is simple enough that Grep is adequate.
+
+  Either option is fine. Do NOT block progress waiting for vfs.
+```
+
+> **NOTE**: If MCP fails, try CLI before falling back. But if both are unavailable, do NOT stall -- notify once or skip and keep working. The goal is token efficiency, not blocking productivity.
+
+## How to Call: MCP (preferred)
+
+The MCP server name is **`user-user-vfs`**. The two key tools are **`search`** and **`extract`**.
+
+> **CRITICAL: MCP calls MUST use absolute paths.**
+> MCP runs on the host outside the sandbox and does NOT share the agent's working directory. Relative paths like `"."` or `"./internal"` will resolve to the wrong location or fail. **Always use the full absolute workspace path** (available from the workspace info provided at the start of every conversation).
+
+**Find a function/class/type by name:**
+```
+CallMcpTool(server: "user-user-vfs", toolName: "search", arguments: { "paths": ["/absolute/path/to/workspace"], "pattern": "HandleLogin" })
+```
+
+**List all exports from a directory:**
+```
+CallMcpTool(server: "user-user-vfs", toolName: "extract", arguments: { "paths": ["/absolute/path/to/workspace/internal/handlers"] })
+```
+
+**How to get the absolute path:** The workspace path is provided in `<user_info>` at the start of every conversation (e.g. `Workspace Path: /Users/user/projects/myapp`). Use that value directly. NEVER use `"."` or relative paths in MCP calls.
+
+## How to Call: CLI (fallback only)
+
+Only use CLI if MCP is not available:
+
+```bash
+vfs <path> -f <pattern>           # filter signatures (case-insensitive)
+vfs .                             # all exported sigs in current project
+vfs ./internal ./pkg              # scan specific directories
+vfs handler.go                    # single file
+```
+
+## Decision Flowchart
+
+```
+User asks about code (function, class, type, feature, "how does X work?")
+  │
+  ▼
+Can I skip vfs? (check Skip Conditions below)
+  │
+  ├─ YES → use the appropriate tool directly
+  │
+  └─ NO
+      │
+      ▼
+  STEP 1: vfs search (MCP first, CLI fallback)
+      │
+      ├─ Found → STEP 2: Read exact file + line range only
+      │
+      └─ Nothing returned → STEP 2: Grep/rg (now justified)
+```
+
+## Skip Conditions (the ONLY cases where vfs is not needed)
+
+These are the ONLY four exceptions. If your situation does not exactly match one, you MUST use vfs. Do not invent new exceptions.
+
+1. **You already know the exact file and line** — just `Read` it.
+2. **Searching inside function bodies** — string literals, config keys, error messages, log strings → `Grep` directly.
+3. **Non-code files** — JSON, CSS, Markdown, `.env` → `Grep` directly.
+4. **The user gave you a file path** — e.g. "look at line 50 of client.go" → `Read` directly.
+
+Everything else — including SQL schemas, type declarations, and any definition discovery in supported file types — requires vfs first.
+
+## Strict Rules
+
+**Before every Grep or broad Read, STOP and ask yourself: "Did I call vfs search first?" If the answer is no and no skip condition applies, you MUST call vfs NOW before proceeding.**
+
+1. **MCP calls MUST use absolute paths.** MCP runs on the host, not inside the agent sandbox. Relative paths (`"."`, `"./internal"`) will resolve incorrectly. Always use the full workspace path from `<user_info>` (e.g. `/Users/user/projects/myapp`). This is the most common cause of vfs MCP failures.
+2. **Try MCP first, then CLI.** MCP works in sandboxed environments where CLI cannot. Never skip MCP and go straight to CLI.
+3. **If both MCP and CLI fail, notify once or skip.** Either tell the user vfs is unavailable (so they can start it) or silently proceed with Grep/Read. Do NOT block progress. Once notified, you don't need to notify again in the same session.
+4. **NEVER start with Grep/rg** for finding function definitions, method signatures, class names, type declarations, or SQL table/schema definitions -- **unless vfs is confirmed unavailable** (both MCP and CLI failed).
+5. **NEVER start with Read on an entire file** to hunt for a function. Use vfs to locate it, then Read only the specific lines.
+6. **After vfs locates a signature**, Read with the exact file and line range — not the whole file.
+7. **Pattern is case-insensitive** — no need to search both `fare` and `Fare`.
+8. **"I know Grep would work" is NOT a valid reason to skip vfs.** This rule exists for token efficiency. Follow the process.
+
+## MCP Tools Reference (server: `user-user-vfs`)
+
+| Tool | Purpose | Parameters | Example |
+|------|---------|------------|---------|
+| `search` | Find function/class/type definitions by name | `paths: string[]`, `pattern: string` | `search(paths: ["/absolute/path/to/workspace"], pattern: "auth")` |
+| `extract` | List all exported signatures from paths | `paths: string[]` | `extract(paths: ["/absolute/path/to/workspace/internal/handlers"])` |
+| `stats` | Lifetime usage statistics | none | `stats()` |
+| `list_languages` | Supported languages and extensions | none | `list_languages()` |
+
+## Stats Recording
+
+**Never** pass `--no-record` unless explicitly testing or benchmarking. Recording is on by default — leave it.
+
+**Data location:**
+- History file: `~/.vfs/history.jsonl` (append-only JSONL)
+- View summary: `vfs stats` (CLI) or `CallMcpTool(server: "user-user-vfs", toolName: "stats")` (MCP)
+- Reset: `vfs stats --reset`
+
+## Examples
+
+### Discovery — "what functions relate to auth?"
+
+RIGHT (MCP):
+```
+CallMcpTool(server: "user-user-vfs", toolName: "search", arguments: { "paths": ["/absolute/path/to/workspace"], "pattern": "auth" })
+  → src/handlers/auth.go:23: func HandleLogin(w http.ResponseWriter, r *http.Request)
+  → src/services/auth.go:10: func ValidateToken(token string) (*Claims, error)
+
+Read: src/handlers/auth.go L23-45
+Read: src/services/auth.go L10-38
+```
+
+RIGHT (CLI fallback):
+```
+Shell: vfs . -f auth
+  → src/handlers/auth.go:23: func HandleLogin(w http.ResponseWriter, r *http.Request)
+  → src/services/auth.go:10: func ValidateToken(token string) (*Claims, error)
+
+Read: src/handlers/auth.go L23-45
+Read: src/services/auth.go L10-38
+```
+
+### Pinpointing a single definition
+
+WRONG:
+```
+Grep: "func.*CreateUser" in ./src/      ← VIOLATION: used Grep before vfs
+Read: user_service.go L1-200            ← VIOLATION: reading whole file
+```
+
+RIGHT:
+```
+CallMcpTool(server: "user-user-vfs", toolName: "search", arguments: { "paths": ["/absolute/path/to/workspace/src"], "pattern": "CreateUser" })
+  → src/services/user.go:42: func CreateUser(name string, email string) (*User, error)
+
+Read: src/services/user.go L42-78
+```
+
+### When Grep IS the right first tool (skip vfs)
+
+```
+Grep: "INVALID_API_KEY" in ./internal/     ← string literal inside function body
+Grep: "database_url" in ./*.env            ← non-code file
+Read: handlers/upload.go L42-60            ← user gave exact file path
+```
+
+## Supported File Types
+
+| Language        | Extensions                              |
+|-----------------|-----------------------------------------|
+| Go              | `.go`                                   |
+| JavaScript      | `.js`, `.mjs`, `.cjs`, `.jsx`           |
+| TypeScript      | `.ts`, `.mts`, `.cts`, `.tsx`           |
+| Python          | `.py`                                   |
+| Rust            | `.rs`                                   |
+| Java            | `.java`                                 |
+| HCL / Terraform | `.tf`, `.hcl`                           |
+| Dockerfile      | `Dockerfile`, `Dockerfile.*`, `*.dockerfile` |
+| Protobuf        | `.proto`                                |
+| SQL             | `.sql`                                  |
+| YAML            | `.yml`, `.yaml`                         |
+
+For anything not in this table, use Grep/rg directly.
+
+## MANDATORY: Subagent / Task Tool Delegation
+
+Subagents launched via the `Task` tool do NOT inherit workspace rules. They will default to Grep/Read unless explicitly told otherwise.
+
+**When launching ANY subagent that may search code, you MUST prepend the following block to the task prompt:**
+
+```
+HARD CONSTRAINT — vfs before Grep/Read:
+Before using Grep or reading entire files to find definitions, you MUST call vfs via MCP first.
+CRITICAL: You MUST use the ABSOLUTE workspace path in MCP calls, NEVER relative paths like ".".
+  CallMcpTool(server: "user-user-vfs", toolName: "search", arguments: { "paths": ["<ABSOLUTE_WORKSPACE_PATH>"], "pattern": "<name>" })
+The workspace path is: <insert workspace path from user_info here>
+After vfs returns file:line, Read only that exact line range.
+Only use Grep if: (a) vfs returned nothing, (b) searching string literals/config inside function bodies, (c) non-code files (JSON/CSS/env), or (d) you already know the exact file+line.
+If MCP errors, try CLI: `vfs . -f <name>`. If both fail, fall back to Grep silently.
+```
+
+**No exceptions.** If the subagent's task involves finding functions, types, components, or any code definition, this block MUST be included. Omitting it is a rule violation.

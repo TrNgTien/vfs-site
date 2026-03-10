@@ -1,0 +1,100 @@
+---
+import Default from '@astrojs/starlight/components/Sidebar.astro';
+---
+
+<div class="gh-sidebar-badges">
+  <div class="gh-badges gh-badges--compact" data-repo="TrNgTien/vfs">
+    <a class="gh-badge gh-badge--stars" href="https://github.com/TrNgTien/vfs" target="_blank" rel="noopener">
+      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/>
+      </svg>
+      <span class="gh-badge__value" data-field="stars">—</span>
+    </a>
+    <a class="gh-badge gh-badge--version" href="https://github.com/TrNgTien/vfs/releases/latest" target="_blank" rel="noopener">
+      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M1 7.775V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 0 1 0 2.474l-5.026 5.026a1.75 1.75 0 0 1-2.474 0l-6.25-6.25A1.752 1.752 0 0 1 1 7.775Zm1.5 0c0 .066.026.13.073.177l6.25 6.25a.25.25 0 0 0 .354 0l5.025-5.025a.25.25 0 0 0 0-.354l-6.25-6.25a.25.25 0 0 0-.177-.073H2.75a.25.25 0 0 0-.25.25ZM6 5a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/>
+      </svg>
+      <span class="gh-badge__value" data-field="version">—</span>
+    </a>
+  </div>
+</div>
+<Default><slot /></Default>
+
+<script>
+  const CACHE_KEY = 'vfs-gh-data';
+  const CACHE_TTL = 5 * 60 * 1000;
+
+  interface CacheEntry {
+    stars: number;
+    version: string;
+    ts: number;
+  }
+
+  function getCached(): CacheEntry | null {
+    try {
+      const raw = sessionStorage.getItem(CACHE_KEY);
+      if (!raw) return null;
+      const entry: CacheEntry = JSON.parse(raw);
+      if (Date.now() - entry.ts > CACHE_TTL) return null;
+      return entry;
+    } catch {
+      return null;
+    }
+  }
+
+  function setCache(stars: number, version: string) {
+    try {
+      sessionStorage.setItem(CACHE_KEY, JSON.stringify({ stars, version, ts: Date.now() }));
+    } catch {}
+  }
+
+  function formatStars(n: number): string {
+    if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, '')}k`;
+    return String(n);
+  }
+
+  function render(stars: number, version: string) {
+    document.querySelectorAll<HTMLElement>('.gh-badges').forEach((root) => {
+      const starsEl = root.querySelector<HTMLElement>('[data-field="stars"]');
+      const versionEl = root.querySelector<HTMLElement>('[data-field="version"]');
+      if (starsEl) starsEl.textContent = formatStars(stars);
+      if (versionEl) versionEl.textContent = version;
+      root.classList.add('gh-badges--loaded');
+    });
+  }
+
+  async function fetchGitHubData() {
+    const cached = getCached();
+    if (cached) {
+      render(cached.stars, cached.version);
+      return;
+    }
+
+    const repo = document.querySelector<HTMLElement>('.gh-badges')?.dataset.repo;
+    if (!repo) return;
+
+    try {
+      const [repoRes, releaseRes] = await Promise.allSettled([
+        fetch(`https://api.github.com/repos/${repo}`),
+        fetch(`https://api.github.com/repos/${repo}/releases/latest`),
+      ]);
+
+      const stars =
+        repoRes.status === 'fulfilled' && repoRes.value.ok
+          ? (await repoRes.value.json()).stargazers_count
+          : null;
+
+      const version =
+        releaseRes.status === 'fulfilled' && releaseRes.value.ok
+          ? (await releaseRes.value.json()).tag_name
+          : null;
+
+      if (stars != null) {
+        render(stars, version ?? 'latest');
+        setCache(stars, version ?? 'latest');
+      }
+    } catch {}
+  }
+
+  fetchGitHubData();
+</script>
