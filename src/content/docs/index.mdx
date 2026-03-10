@@ -1,32 +1,32 @@
 ---
-title: What is vfs?
-description: Virtual Function Signatures — extract exported signatures from source code with bodies stripped.
+title: "What is vfs?"
+description: "Virtual Function Signatures — extract exported signatures from source code with bodies stripped."
 ---
 
 **vfs** (Virtual Function Signatures) extracts exported function, class, interface, and type signatures from source code with bodies stripped.
 
-AI coding agents waste tokens by grepping or reading entire files just to find a function. vfs parses source via AST and tree-sitter, returning only the signatures — a compact "table of contents" of any codebase.
+AI coding agents waste tokens by grepping or reading entire files just to find a function. vfs parses source via AST and tree-sitter, returning only the signatures -- a compact "table of contents" of any codebase.
 
-**60–70% fewer tokens per search.**
+**60-70% fewer tokens per search.**
 
-It works with any AI coding tool — Cursor, Claude Code, Antigravity, Windsurf, Cline, Continue, Aider, Copilot, Zed, or your own scripts. No vendor lock-in.
+It works with any AI coding tool -- Cursor, Claude Code, Antigravity, Windsurf, Cline, Continue, Aider, Copilot, Zed, or your own scripts. No vendor lock-in.
 
 ## How it works
 
 Given a Go project with thousands of lines, asking "where is the login handler?" traditionally means grepping or reading entire files. vfs gives you just the signatures:
 
-```bash
+```
 $ vfs . -f login
 internal/handlers/auth.go:23:   func HandleLogin(w http.ResponseWriter, r *http.Request)
 internal/services/auth.go:10:   func ValidateToken(token string) (*Claims, error)
 internal/middleware/jwt.go:45:  func RequireLogin(next http.Handler) http.Handler
 ```
 
-Each line tells you the **file**, **line number**, and **full signature** — no function bodies, no imports, no noise. You (or your AI agent) can then read only the exact lines needed.
+Each line tells you the **file**, **line number**, and **full signature** -- no function bodies, no imports, no noise. You (or your AI agent) can then read only the exact lines needed.
 
-This works across **15 languages**:
+This works across **16 languages**:
 
-```bash
+```
 $ vfs ./frontend -f auth
 src/hooks/useAuth.ts:5:         export function useAuth(): AuthContext
 src/components/LoginForm.tsx:12: export const LoginForm: React.FC<LoginFormProps>
@@ -35,7 +35,7 @@ src/api/client.py:28:           def authenticate(username: str, password: str) -
 
 ## Token savings at a glance
 
-Self-benchmark on the vfs repository (pattern `"Extract"`, 4,178 lines of source):
+Self-benchmark on this repository (pattern `"Extract"`, 4,178 lines of source):
 
 |                 | Read all files | grep       | vfs        |
 |-----------------|----------------|------------|------------|
@@ -43,8 +43,8 @@ Self-benchmark on the vfs repository (pattern `"Extract"`, 4,178 lines of source
 | Lines           | 4,178          | 148        | 15         |
 | Est. tokens     | 26,079         | 3,537      | 373        |
 
-- **98.6% fewer tokens** vs reading all files (26,079 → 373)
-- **89.5% fewer tokens** vs grep (3,537 → 373)
+- **vfs saves 98.6% tokens** vs reading all files (26,079 -> 373)
+- **vfs saves 89.5% tokens** vs grep (3,537 -> 373)
 
 See the full [Benchmark](/reference/benchmark/) page for details and how to run your own.
 

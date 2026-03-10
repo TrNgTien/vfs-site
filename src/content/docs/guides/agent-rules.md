@@ -1,6 +1,6 @@
 ---
-title: Agent Rules
-description: Tell your AI agent to use vfs before grep — required for token savings.
+title: "Agent Rules"
+description: "Tell your AI agent to use vfs before grep — required for token savings."
 ---
 
 :::caution[This step is required]
@@ -13,51 +13,22 @@ You must create a **rule file** in your project that instructs the agent: "use v
 
 Each AI tool has its own rule system:
 
-| Tool | Rule file location |
-|------|-------------------|
-| **Cursor** | `.cursor/rules/vfs.mdc` |
-| **Claude Code** | `CLAUDE.md` |
-| **Antigravity** | `GEMINI.md` (also reads `AGENTS.md`) |
-| **Windsurf** | `.windsurf/rules/vfs.md` |
-| **Cline** | `.clinerules` |
-| **Continue** | `.continue/rules/vfs.md` |
-| **Aider** | `.aider.conventions.md` |
+| Tool | Rule file location | How to reuse `vfs-agent-search.mdc` |
+|------|-------------------|--------------------------------------|
+| **Cursor** | `.cursor/rules/vfs.mdc` | Copy directly: `cp vfs-agent-search.mdc yourproject/.cursor/rules/` |
+| **Claude Code** | `CLAUDE.md` | Copy the content into your `CLAUDE.md` (strip the YAML frontmatter) |
+| **Antigravity** | `GEMINI.md` | Copy the content into your `GEMINI.md` (strip the YAML frontmatter). Also reads `AGENTS.md`. |
+| **Windsurf** | `.windsurf/rules/vfs.md` | Copy as-is: `cp vfs-agent-search.mdc yourproject/.windsurf/rules/vfs.md` |
+| **Cline** | `.clinerules` | Copy the content into your `.clinerules` (strip the YAML frontmatter) |
+| **Continue** | `.continue/rules/vfs.md` | Copy as-is: `cp vfs-agent-search.mdc yourproject/.continue/rules/vfs.md` |
+| **Aider** | `.aider.conventions.md` | Copy the content into your `.aider.conventions.md` (strip the YAML frontmatter) |
 
 ## Rule content
 
 The core instruction is the same regardless of tool. Create the rule file for your tool (see table above) and add this content:
 
 ```markdown
-# vfs: Use AST-based search before grep
 
-When looking for function definitions, method signatures, class names, or type
-declarations, you MUST use vfs before grep or reading entire files.
-
-## How to call vfs
-
-MCP (preferred — works in sandboxed editors):
-  search(paths: ["."], pattern: "functionName")
-
-CLI (fallback — if MCP is not available):
-  vfs . -f functionName
-
-## Workflow
-
-1. Call vfs search with the name you're looking for.
-2. vfs returns file paths and line numbers.
-3. Read ONLY the specific lines returned — not the whole file.
-
-## When to skip vfs and use grep directly
-
-- Searching inside function bodies (string literals, error messages, config keys)
-- Searching non-code files (JSON, CSS, .env, markdown)
-- You already know the exact file and line number
-- vfs returned no results for your query
-
-## Why this matters
-
-vfs parses source via AST and returns only signatures (bodies stripped).
-This saves 60-70% tokens compared to grep. Do not skip this step.
 ```
 
 ## Setup examples

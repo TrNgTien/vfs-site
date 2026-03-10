@@ -1,6 +1,6 @@
 ---
-title: Security & Privacy
-description: vfs is local-first by design. Your source code never leaves your machine.
+title: "Security & Privacy"
+description: "vfs is local-first by design. Your source code never leaves your machine."
 ---
 
 :::note[Local-first by design]

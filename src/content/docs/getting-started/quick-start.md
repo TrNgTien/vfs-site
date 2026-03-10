@@ -1,6 +1,6 @@
 ---
-title: Quick Start
-description: Your first vfs commands in 60 seconds.
+title: "Quick Start"
+description: "Your first vfs commands in 60 seconds."
 ---
 
 Once [installed](/getting-started/installation/), you can start scanning code immediately.

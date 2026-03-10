@@ -1,11 +1,13 @@
 ---
-title: CLI Commands
-description: Complete reference for all vfs commands and flags.
+title: "CLI Commands"
+description: "Complete reference for all vfs commands and flags."
+---
+
 ---
 
 ## `vfs [paths...] -f <pattern>`
 
-The main command. Scans files and directories, printing exported signatures.
+The main command. Scans files/directories and prints exported signatures.
 
 ```bash
 vfs .                          # all signatures in current directory (recursive)
@@ -28,12 +30,12 @@ vfs . -f auth --no-record      # skip logging to history
 
 ## `vfs bench`
 
-Compare token usage across three methods: reading all files, grep, and vfs.
+Compare token usage: reading all files vs grep vs vfs.
 
 ```bash
-vfs bench --self                                   # benchmark on vfs source
-vfs bench -f HandleLogin /path/to/go-project       # benchmark on any project
-vfs bench -f Login /path/to/project --show-output  # show actual output
+vfs bench --self                              # benchmark on vfs's own source
+vfs bench -f HandleLogin /path/to/project     # benchmark on any project
+vfs bench -f Login /path/to/project --show-output  # also print actual output
 ```
 
 ---
@@ -71,8 +73,6 @@ vfs mcp                  # stdio transport (default, for editor integration)
 vfs mcp --http :8080     # HTTP transport (for Docker / remote setups)
 ```
 
-See [AI Tools Setup](/guides/ai-tools-setup/) for configuration details.
-
 ---
 
 ## `vfs serve`
@@ -107,4 +107,4 @@ vfs dashboard                # default port 3000
 vfs dashboard --port 4000    # custom port
 ```
 
-Open `http://localhost:3000` to see usage statistics and token savings over time.
+See [AI Tools Setup](/guides/ai-tools-setup/) for MCP server configuration details.

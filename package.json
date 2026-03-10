@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "sync": "node scripts/sync-readme.js",
+    "build": "node scripts/sync-readme.js && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
