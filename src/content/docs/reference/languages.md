@@ -1,9 +1,9 @@
 ---
-title: "Supported Languages — 16 Languages via AST & Tree-sitter"
-description: "vfs supports 16 languages: Go, TypeScript, JavaScript, Python, Rust, Java, C#, Dart, Kotlin, Swift, Ruby, HCL, Dockerfile, Protobuf, SQL, and YAML. Parsed via go/ast, tree-sitter, and line-based heuristics."
+title: "Supported Languages — 17 Languages via AST & Tree-sitter"
+description: "vfs supports 17 languages: Go, TypeScript, JavaScript, Python, Rust, Java, C#, Dart, Kotlin, Swift, Ruby, HCL, Dockerfile, Protobuf, SQL, and YAML. Parsed via go/ast, tree-sitter, and line-based heuristics."
 ---
 
-vfs supports **16 languages** using a combination of Go's native AST parser, tree-sitter grammars, and line-based heuristics.
+vfs supports **17 languages** using a combination of Go's native AST parser, tree-sitter grammars, and line-based heuristics.
 
 ## Language table
 
@@ -20,6 +20,7 @@ vfs supports **16 languages** using a combination of Go's native AST parser, tre
 | Kotlin          | `.kt`, `.kts`                           | tree-sitter |
 | Swift           | `.swift`                                | tree-sitter |
 | Ruby            | `.rb`                                   | tree-sitter |
+| Solidity        | `.sol`                                  | tree-sitter |
 | HCL / Terraform | `.tf`, `.hcl`                           | tree-sitter |
 | Dockerfile      | `Dockerfile`, `Dockerfile.*`            | line-based  |
 | Protobuf        | `.proto`                                | line-based  |
@@ -34,7 +35,7 @@ Go files are parsed using Go's built-in `go/ast` package. This provides the most
 
 ### Tree-sitter
 
-JavaScript, TypeScript, Python, Rust, Java, C#, Dart, Kotlin, Swift, Ruby, and HCL / Terraform are parsed using [tree-sitter](https://tree-sitter.github.io/tree-sitter/) grammars. Tree-sitter produces concrete syntax trees that vfs traverses to extract exported declarations.
+JavaScript, TypeScript, Python, Rust, Java, C#, Dart, Kotlin, Swift, Ruby, Solidity, and HCL / Terraform are parsed using [tree-sitter](https://tree-sitter.github.io/tree-sitter/) grammars. Tree-sitter produces concrete syntax trees that vfs traverses to extract exported declarations.
 
 ### Line-based
 

@@ -25,7 +25,7 @@ This page covers **Step 1**. See [Agent Rules](/guides/agent-rules/) for Step 2.
 
 #### Method 1: MCP Integration (recommended)
 
-MCP lets the AI agent call vfs tools (`search`, `extract`, `stats`, `list_languages`) directly without shell access. This works even in sandboxed environments where the agent can't run arbitrary binaries.
+MCP lets the AI agent call vfs tools (`search`, `extract`, `list_languages`) directly without shell access. This works even in sandboxed environments where the agent can't run arbitrary binaries.
 
 #### MCP Tools
 
@@ -33,7 +33,6 @@ MCP lets the AI agent call vfs tools (`search`, `extract`, `stats`, `list_langua
 |------|-------------|------------|
 | `search` | Find signatures matching a pattern | `paths` (string[]), `pattern` (string) |
 | `extract` | Return all exported signatures | `paths` (string[]) |
-| `stats` | Lifetime usage statistics | none |
 | `list_languages` | Supported languages and extensions | none |
 
 Most tools use the same stdio JSON config. The only difference is where the file lives:
